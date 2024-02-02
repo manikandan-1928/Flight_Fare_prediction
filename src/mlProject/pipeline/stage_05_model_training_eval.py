@@ -1,5 +1,5 @@
 from src.mlProject.config.configuration import ConfigurationManager
-from mlProject.components.stage_05_model_training_eval import Training
+from src.mlProject.components.stage_05_model_training_eval import Training
 from src.mlProject import logger
 
 
@@ -19,7 +19,9 @@ class DataModelTrainingPipeline:
 
         # Call the train_model method on the instance
         results, model = training_instance.train_model()
-        training_instance.log_into_mlflow(results, model)
+
+        print('Results:', results)
+        print('Model:', model)
 
 
 if __name__ == '__main__':
