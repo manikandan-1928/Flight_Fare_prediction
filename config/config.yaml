@@ -1,0 +1,51 @@
+artifacts_root: artifacts
+
+
+data_ingestion:
+  root_dir: artifacts/data_ingestion
+  source_URL: https://drive.google.com/file/d/1ELNjqmFroAQsn5bGeO8Wu43FZibUrul6/view?usp=sharing
+  local_data_file: artifacts/data_ingestion/data.zip
+  unzip_dir: artifacts/data_ingestion/
+
+
+data_validation:
+  root_dir: artifacts/data_validation
+  unzip_data_dir: artifacts/data_ingestion/Flight_Fare_Data.csv
+  STATUS_FILE: artifacts/data_validation/status.txt
+
+
+data_cleaning:
+  root_dir: artifacts/data_cleaning
+  data_path: artifacts/data_ingestion/Flight_Fare_Data.csv
+  validated_path: artifacts/data_validation/status.txt
+   
+
+data_transformation:
+  root_dir: artifacts/data_cleaning
+  data_path: artifacts/data_cleaning/cleaned_data.csv
+  preprocessor_obj_file_path: artifacts/data_cleaning/preprocessor.pkl
+
+
+
+data_model:
+  root_dir: artifacts/data_cleaning
+  data_path: artifacts/data_cleaning/transformed_data.csv
+  model_path: artifacts/model
+
+
+evaluate_model:
+  root_dir: artifacts/model
+  train_data_path: artifacts/data_cleaning/training_data.csv
+  test_data_path: artifacts/data_cleaning/testing_data.csv
+  params_report: artifacts/model/params_report.json
+  results_report: artifacts/model/results.json
+  model_report: artifacts/model/report.json
+
+
+
+
+
+
+
+
+

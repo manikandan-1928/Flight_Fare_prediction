@@ -1,0 +1,1 @@
+{"train_data_r2_score": 0.9209708382158592, "train_data_adj_r2_score": 0.8475862267036328, "test_data_r2_score": 0.8398704113945977, "test_data_adj_r2_score": 0.7006604119487061, "test_data_mae": 1164.152441966152, "test_data_mse": 3338746.178703335}
