@@ -13,6 +13,7 @@ import base64
 import sys
 import numpy as np 
 import pandas as pd
+from sklearn.metrics import r2_score
 
 
 
@@ -48,7 +49,7 @@ def evaluate_models(X_train, y_train, X_test, y_test, models):
             # Evaluate model performance
             test_model_score = r2_score(y_test, y_test_pred)
 
-            report[model_name,"_r2_score"] = test_model_score
+            report[model_name] = test_model_score
 
         return report
 

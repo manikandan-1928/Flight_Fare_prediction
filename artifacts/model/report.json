@@ -1,7 +1,7 @@
 {
     "model_report": {
-        "Random Forest": 0.8123321106631949,
-        "Ridge Regression": 0.5708934133576727,
+        "Random Forest": 0.8098554736094523,
+        "Linear Regression": 0.5708953540843202,
         "XGBRegressor": 0.8322409007304338
     },
     "best_model_score": 0.8322409007304338,
