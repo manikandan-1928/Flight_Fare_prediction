@@ -17,7 +17,7 @@ from src.mlProject.entity.config_entity import DataTuningConfig
 
 
 class Training:
-    def __init__(self, config: DataTuningConfig):
+    def __init__(self, config):
         self.config = config
 
     def train_model(self):
@@ -33,6 +33,7 @@ class Training:
             X_test = test_data.iloc[:, :-1]
             y_test = test_data.iloc[:, -1]
 
+
             model_filepath = os.path.join(self.config.root_dir, 'trained_model.h5')
 
             # Load the JSON file
@@ -43,6 +44,8 @@ class Training:
             best_model_name = data["best_model_name"]
 
             print(best_model_name)
+            logger.info("Best model is chosen")
+
 
             if best_model_name == 'Random Forest':
                 best_model = RandomForestRegressor()
@@ -53,7 +56,11 @@ class Training:
             elif best_model_name == 'XGBRegressor':
                 best_model = XGBRegressor()
 
+            logger.info("Setting the best params to the chosen model")
+
             best_model.set_params(**self.config.all_params)
+            logger.info("Model trainig is trained with the best parameters")
+
 
             best_model.fit(X_train, y_train)
             print('Model Trained')
@@ -61,6 +68,13 @@ class Training:
             # Save the trained model
             with open(model_filepath, 'wb') as file:
                 pickle.dump(best_model, file)
+
+
+            with open('model.h5', 'wb') as file:
+                pickle.dump(best_model, file)
+                
+
+            logger.info("Training completed and model saved")
 
             # Load existing results if available
             results_path = os.path.join(self.config.root_dir, "results.json")
@@ -70,8 +84,12 @@ class Training:
             else:
                 existing_results = {}
 
+            logger.info("Model prediction for evaluation")
+
             y_train_pred = best_model.predict(X_train)
             y_test_pred = best_model.predict(X_test)
+            logger.info("Metrics calculation beginning")
+           
 
             train_model_r2_score = r2_score(y_train, y_train_pred)
 
@@ -93,7 +111,14 @@ class Training:
             with open(results_path, 'w') as file:
                 json.dump(existing_results, file)
 
+            logger.info("Evaluation finished and saved results")
+
+
             return new_results, best_model
         
         except Exception as e:
             raise e
+
+
+                
+    
