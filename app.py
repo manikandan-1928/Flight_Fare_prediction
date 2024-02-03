@@ -1,13 +1,19 @@
 from flask import Flask, request, render_template
+from flask_cors import CORS, cross_origin
 import pandas as pd
 from src.mlProject.pipeline.predict import PredictionPipeline
 from datetime import datetime
 import numpy as np
 
 
-application = Flask(__name__)
+app = Flask(__name__)
+CORS(app)
 
-app = application
+
+class ClientApp:
+    def __init__(self, input_data=None):
+        # Initialize PredictionPipeline with input_data
+        self.predict = PredictionPipeline(input_data)
 
 # Route for a home page
 @app.route('/')
@@ -57,11 +63,14 @@ def predict_datapoint():
     # Creating a DataFrame from the dictionary
     input_df = pd.DataFrame(input_dict)
 
-    predict_pipeline = PredictionPipeline(input_df)
-    results = predict_pipeline.predict()
+    # Initialize ClientApp and pass input_df to PredictionPipeline
+    clApp = ClientApp(input_data=input_df)
+
+    # Perform prediction
+    results = clApp.predict.predict()
     return render_template('index.html', results= str(np.round(results[0],2)))
                            
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=8080) #for AWS
