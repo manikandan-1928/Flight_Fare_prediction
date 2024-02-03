@@ -1,7 +1,7 @@
 import os
 import pickle
 import pandas as pd
-
+import numpy as np
 
 class PredictionPipeline:
     def __init__(self,input_data):
@@ -12,13 +12,13 @@ class PredictionPipeline:
 
         input_data = pd.DataFrame(self.input_data)
 
-        input_data['Date_of_Journey'] = pd.to_datetime(input_data['Date_of_Journey'])
+        input_data['Date_of_Departure'] = pd.to_datetime(input_data['Date_of_Departure'])
         
         # Extract features from 'Date_of_Journey'
-        input_data['Journey_day'] = pd.DatetimeIndex(input_data['Date_of_Journey']).day
-        input_data['Journey_month'] = pd.DatetimeIndex(input_data['Date_of_Journey']).month
-        input_data['Journey_weekday'] = pd.DatetimeIndex(input_data['Date_of_Journey']).weekday
-        input_data['Journey_year'] = pd.DatetimeIndex(input_data['Date_of_Journey']).year
+        input_data['Journey_day'] = pd.DatetimeIndex(input_data['Date_of_Departure']).day
+        input_data['Journey_month'] = pd.DatetimeIndex(input_data['Date_of_Departure']).month
+        input_data['Journey_weekday'] = pd.DatetimeIndex(input_data['Date_of_Departure']).weekday
+        input_data['Journey_year'] = pd.DatetimeIndex(input_data['Date_of_Departure']).year
         
         # Modify 'Destination' values
         input_data['Destination'] = np.where(input_data['Destination'] == 'Delhi', 'New Delhi', input_data['Destination'])
@@ -37,7 +37,7 @@ class PredictionPipeline:
         input_data['Total_Stops'] = input_data['Total_Stops'].map({'non-stop': 0, '1 stop': 1, '2 stops': 2, '3 stops': 3, '4 stops': 4})
         
         # Drop unnecessary columns
-        input_data.drop(columns=['Date_of_Journey', 'Dep_Time', 'Arrival_Time', 'Route', 'Additional_Info', 'Duration'], axis=1, inplace=True)
+        input_data.drop(columns=['Date_of_Departure', 'Dep_Time', 'Arrival_Time', 'Duration'], axis=1, inplace=True)
 
         preprocessor_path = os.path.join('artifacts','data_cleaning','preprocessor.pkl')
 
@@ -46,14 +46,23 @@ class PredictionPipeline:
 
         input_transformed_data = preprocessor_obj.transform(input_data)
 
-        trained_model_path = os.path.join('artifacts','trained_model.h5')
+        print(input_transformed_data)
+
+        print(len(input_transformed_data))
+
+        trained_model_path = os.path.join('artifacts','model','trained_model.h5')
         
         with open(trained_model_path, 'rb') as file:
             model = pickle.load(file)
 
-        price = model.predict([input_transformed_data])
+        print(len(model.feature_importances_))
+
+        price = model.predict(input_transformed_data)
 
         print(price)
 
         return price
+    
 
+if __name__ == "__main__":
+    app.run(debug=True)
